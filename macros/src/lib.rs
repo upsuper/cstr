@@ -24,7 +24,7 @@ fn build_bytes(input: &str) -> String {
     };
     let cstr = match CString::new(s.value()) {
         Ok(s) => s,
-        _ => panic!("literal must not contain zero char")
+        _ => panic!("literal must not contain NUL byte")
     };
     let mut bytes = Vec::new();
     bytes.extend(br#"b""#);
