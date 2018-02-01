@@ -5,9 +5,8 @@ extern crate proc_macro;
 extern crate quote;
 extern crate syn;
 
-use std::char;
+use std::ascii::escape_default;
 use std::ffi::CString;
-use std::fmt::Write;
 
 define_proc_macros! {
     #[allow(non_snake_case)]
@@ -26,20 +25,11 @@ fn build_bytes(input: &str) -> String {
         Ok(s) => s,
         _ => panic!("literal must not contain zero char")
     };
-    let mut bytes = String::from(r#"b""#);
-    for &b in cstr.as_bytes().iter() {
-        match b {
-            b'\t' => bytes.push_str(r"\t"),
-            b'\r' => bytes.push_str(r"\r"),
-            b'\n' => bytes.push_str(r"\n"),
-            b'\"' => bytes.push_str(r#"\""#),
-            b'\\' => bytes.push_str(r"\\"),
-            0x20...0x7e => bytes.push(char::from_u32(b as u32).unwrap()),
-            _ => write!(&mut bytes, r"\x{:02x}", b).unwrap(),
-        }
-    }
-    bytes.push_str(r#"\0""#);
-    bytes
+    let mut bytes = Vec::new();
+    bytes.extend(br#"b""#);
+    bytes.extend(cstr.as_bytes().iter().flat_map(|&b| escape_default(b)));
+    bytes.extend(br#"\0""#);
+    String::from_utf8(bytes).unwrap()
 }
 
 #[cfg(test)]
@@ -60,7 +50,7 @@ mod tests {
     #[test]
     fn test_build_bytes() {
         assert_eq!(build_bytes!("aaa"), result!(b"aaa\0"));
-        assert_eq!(build_bytes!("\t\n\r\"\\'"), result!(b"\t\n\r\"\\'\0"));
+        assert_eq!(build_bytes!("\t\n\r\"\\'"), result!(b"\t\n\r\"\\\'\0"));
         assert_eq!(build_bytes!("\x01\x02 \x7f"), result!(b"\x01\x02 \x7f\0"));
         assert_eq!(build_bytes!("你好"), result!(b"\xe4\xbd\xa0\xe5\xa5\xbd\0"));
     }
