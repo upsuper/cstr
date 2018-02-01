@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate procedural_masquerade;
 extern crate proc_macro;
+#[cfg(test)]
 #[macro_use]
 extern crate quote;
 extern crate syn;
