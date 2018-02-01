@@ -1,6 +1,6 @@
 [package]
 name = "cstr"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Macro for building static CStr reference"
 repository = "https://github.com/upsuper/cstr"
@@ -8,5 +8,5 @@ license = "MIT"
 keywords = ["macro", "cstr"]
 
 [dependencies]
-cstr-macros = {path = "./macros", version = "0.1.1"}
+cstr-macros = {path = "./macros", version = "0.1.2"}
 procedural-masquerade = "0.1"

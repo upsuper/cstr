@@ -1,6 +1,6 @@
 [package]
 name = "cstr-macros"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Procedural macros for cstr"
 repository = "https://github.com/upsuper/cstr"
