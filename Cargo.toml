@@ -6,6 +6,10 @@ description = "Macro for building static CStr reference"
 repository = "https://github.com/upsuper/cstr"
 license = "MIT"
 keywords = ["macro", "cstr"]
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "upsuper/cstr", branch = "master" }
 
 [dependencies]
 cstr-macros = {path = "./macros", version = "0.1.3"}
