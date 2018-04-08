@@ -8,5 +8,5 @@ license = "MIT"
 keywords = ["macro", "cstr"]
 
 [dependencies]
-cstr-macros = {path = "./macros", version = "0.1.2"}
+cstr-macros = {path = "./macros", version = "0.1.3"}
 procedural-masquerade = "0.1"
