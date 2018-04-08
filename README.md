@@ -17,12 +17,12 @@ may be expanded in the future if necessary.
 
 # Example
 
-```
+```rust
 #[macro_use] extern crate cstr;
 use std::ffi::CStr;
 
-# fn main() {
-let test = cstr!("hello");
-assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
-# }
+fn main() {
+    let test = cstr!("hello");
+    assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
+}
 ```
