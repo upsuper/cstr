@@ -1,6 +1,6 @@
 [package]
 name = "cstr"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Macro for building static CStr reference"
 repository = "https://github.com/upsuper/cstr"
@@ -12,5 +12,5 @@ readme = "README.md"
 travis-ci = { repository = "upsuper/cstr", branch = "master" }
 
 [dependencies]
-cstr-macros = {path = "./macros", version = "0.1.3"}
+cstr-macros = {path = "./macros", version = "0.1.4"}
 procedural-masquerade = "0.1"
