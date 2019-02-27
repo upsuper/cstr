@@ -26,3 +26,12 @@ fn main() {
     assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 }
 ```
+
+# Note for 2018 edition
+
+On Rust 2018 edition, you can not simply use `cstr::cstr!(...)` or
+`use cstr::cstr;` due to limitation of procedural-masquerade,
+the crate we use to build this macro.
+
+You need to stick with 2015 edition's `#[macro_use]` or import
+everything from this crate via `use cstr::*;`.
