@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/upsuper/cstr.svg?branch=master)](https://travis-ci.org/upsuper/cstr)
 [![Docs](https://docs.rs/cstr/badge.svg)](https://docs.rs/cstr)
 
-A macro for getting `&'static CStr` from literal.
+A macro for getting `&'static CStr` from literal or identifier.
 
 This macro checks whether the given literal is valid for `CStr`
 at compile time, and returns a static reference of `CStr`.
@@ -23,6 +23,8 @@ use std::ffi::CStr;
 
 fn main() {
     let test = cstr!("hello");
+    assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
+    let test = cstr!(hello);
     assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 }
 ```
