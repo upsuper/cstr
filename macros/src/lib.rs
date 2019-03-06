@@ -19,7 +19,7 @@ define_proc_macros! {
 
 fn input_to_string(input: &str) -> String {
     if let Ok(s) = syn::parse_str::<syn::LitStr>(input) {
-        return s.value().to_string();
+        return s.value();
     }
     if let Ok(i) = syn::parse_str::<syn::Ident>(input) {
         return i.to_string();
