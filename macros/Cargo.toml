@@ -1,6 +1,6 @@
 [package]
 name = "cstr-macros"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Procedural macros for cstr"
 repository = "https://github.com/upsuper/cstr"
@@ -13,9 +13,9 @@ proc-macro = true
 procedural-masquerade = "0.1"
 
 [dependencies.syn]
-version = "0.15"
+version = "1"
 default-features = false
 features = ["derive", "parsing"]
 
 [dev-dependencies]
-quote = "0.6"
+quote = "1"
