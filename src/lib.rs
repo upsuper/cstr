@@ -42,7 +42,7 @@ fn build_byte_str(input: TokenStream) -> Result<LitByteStr> {
     let Input(bytes, span) = syn::parse2::<Input>(input)?;
     CString::new(bytes)
         .map(|s| LitByteStr::new(s.as_bytes_with_nul(), span))
-        .map_err(|_| Error::new(span, "literal must not contain NUL byte"))
+        .map_err(|_| Error::new(span, "nul byte found in the literal"))
 }
 
 struct Input(Vec<u8>, Span);
