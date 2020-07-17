@@ -6,7 +6,7 @@
 //! Note that it currently cannot be used to initialize constants due
 //! to restriction of Rust.
 //!
-//! # Example
+//! ## Example
 //!
 //! ```
 //! use cstr::cstr;
