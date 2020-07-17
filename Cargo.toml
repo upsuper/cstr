@@ -1,16 +1,25 @@
 [package]
 name = "cstr"
-version = "0.1.7"
+version = "0.2.0"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Macro for building static CStr reference"
 repository = "https://github.com/upsuper/cstr"
 license = "MIT"
 keywords = ["macro", "cstr"]
 readme = "README.md"
+edition = "2018"
+
+[lib]
+proc-macro = true
 
 [badges]
 travis-ci = { repository = "upsuper/cstr", branch = "master" }
 
 [dependencies]
-cstr-macros = {path = "./macros", version = "0.1.5"}
-procedural-masquerade = "0.1"
+proc-macro2 = "1.0.18"
+quote = "1.0.7"
+
+[dependencies.syn]
+version = "1"
+default-features = false
+features = ["parsing", "printing"]

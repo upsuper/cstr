@@ -6,54 +6,62 @@
 //! Note that it currently cannot be used to initialize constants due
 //! to restriction of Rust.
 //!
-//! Also, it currently only supports a UTF-8 string as input because
-//! Rust's tokenizer only accepts that without the `b` prefix. This
-//! may be expanded in the future if necessary.
-//!
 //! # Example
 //!
 //! ```
-//! #[macro_use] extern crate cstr;
+//! use cstr::cstr;
 //! use std::ffi::CStr;
 //!
 //! # fn main() {
+//! let test = cstr!(b"hello\xff");
+//! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\xff\0").unwrap());
 //! let test = cstr!("hello");
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 //! let test = cstr!(hello);
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 //! # }
 //! ```
-//!
-//! # Note for 2018 edition
-//!
-//! On Rust 2018 edition, you can not simply use `cstr::cstr!(...)` or
-//! `use cstr::cstr;` due to limitation of procedural-masquerade,
-//! the crate we use to build this macro.
-//!
-//! You need to stick with 2015 edition's `#[macro_use]` or import
-//! everything from this crate via `use cstr::*;`.
 
-#[allow(unused_imports)]
-#[macro_use]
-extern crate cstr_macros;
-#[macro_use]
-extern crate procedural_masquerade;
+use proc_macro::TokenStream as RawTokenStream;
+use proc_macro2::{Span, TokenStream};
+use quote::quote;
+use std::ffi::CString;
+use syn::parse::{Parse, ParseBuffer};
+use syn::{Error, Ident, LitByteStr, LitStr, Result};
 
-#[doc(hidden)]
-pub use cstr_macros::*;
+#[proc_macro]
+pub fn cstr(input: RawTokenStream) -> RawTokenStream {
+    let tokens = match build_byte_str(input.into()) {
+        Ok(s) => quote!(unsafe { ::std::ffi::CStr::from_bytes_with_nul_unchecked(#s) }),
+        Err(e) => e.to_compile_error(),
+    };
+    tokens.into()
+}
 
-define_invoke_proc_macro!(cstr__invoke_build_bytes);
+fn build_byte_str(input: TokenStream) -> Result<LitByteStr> {
+    let Input(bytes, span) = syn::parse2::<Input>(input)?;
+    CString::new(bytes)
+        .map(|s| LitByteStr::new(s.as_bytes_with_nul(), span))
+        .map_err(|_| Error::new(span, "literal must not contain NUL byte"))
+}
 
-#[macro_export]
-macro_rules! cstr {
-    ($t: tt) => {
-        {
-            cstr__invoke_build_bytes! {
-                cstr_internal__build_bytes!($t)
-            }
-            unsafe {
-                ::std::ffi::CStr::from_bytes_with_nul_unchecked(BYTES)
-            }
+struct Input(Vec<u8>, Span);
+
+impl Parse for Input {
+    fn parse<'a>(input: &'a ParseBuffer<'a>) -> Result<Self> {
+        let lookahead = input.lookahead1();
+        if lookahead.peek(LitByteStr) {
+            let b = input.parse::<LitByteStr>().unwrap();
+            return Ok(Input(b.value(), b.span()));
         }
+        if lookahead.peek(LitStr) {
+            let s = input.parse::<LitStr>().unwrap();
+            return Ok(Input(s.value().into_bytes(), s.span()));
+        }
+        if lookahead.peek(Ident) {
+            let i = input.parse::<Ident>().unwrap();
+            return Ok(Input(i.to_string().into_bytes(), i.span()));
+        }
+        Err(lookahead.error())
     }
 }
