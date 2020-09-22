@@ -11,14 +11,12 @@
 //! use cstr::cstr;
 //! use std::ffi::CStr;
 //!
-//! # fn main() {
 //! let test = cstr!(b"hello\xff");
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\xff\0").unwrap());
 //! let test = cstr!("hello");
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 //! let test = cstr!(hello);
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
-//! # }
 //! ```
 
 use proc_macro::TokenStream as RawTokenStream;
