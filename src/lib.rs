@@ -22,7 +22,7 @@
 //! ```
 
 use proc_macro::TokenStream as RawTokenStream;
-use proc_macro2::{Span, TokenStream};
+use proc_macro2::{Literal, Span, TokenStream};
 use quote::quote;
 use std::ffi::CString;
 use syn::parse::{Parse, ParseBuffer};
@@ -41,10 +41,14 @@ pub fn cstr(input: RawTokenStream) -> RawTokenStream {
     tokens.into()
 }
 
-fn build_byte_str(input: TokenStream) -> Result<LitByteStr> {
+fn build_byte_str(input: TokenStream) -> Result<Literal> {
     let Input(bytes, span) = syn::parse2::<Input>(input)?;
     CString::new(bytes)
-        .map(|s| LitByteStr::new(s.as_bytes_with_nul(), span))
+        .map(|s| {
+            let mut lit = Literal::byte_string(s.as_bytes_with_nul());
+            lit.set_span(span);
+            lit
+        })
         .map_err(|_| Error::new(span, "nul byte found in the literal"))
 }
 
