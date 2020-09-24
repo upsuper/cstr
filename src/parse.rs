@@ -62,7 +62,7 @@ fn parse_raw_content(s: &[u8]) -> Vec<u8> {
     Vec::from(&s[q_start + 1..q_end])
 }
 
-/// Parses the cooked string / bytes content from `"`.
+/// Parses the cooked string / bytes content within quotes.
 fn parse_cooked_content(mut s: &[u8]) -> Vec<u8> {
     s = &s[1..s.iter().rposition(|b| *b == b'"').unwrap()];
     let mut result = Vec::new();
