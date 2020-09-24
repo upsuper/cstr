@@ -1,6 +1,6 @@
 [package]
 name = "cstr"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Macro for building static CStr reference"
 repository = "https://github.com/upsuper/cstr"
@@ -18,11 +18,6 @@ travis-ci = { repository = "upsuper/cstr", branch = "master" }
 [dependencies]
 proc-macro2 = "1.0.18"
 quote = "1.0.7"
-
-[dependencies.syn]
-version = "1"
-default-features = false
-features = ["parsing"]
 
 [dev-dependencies]
 trybuild = "1.0.30"
