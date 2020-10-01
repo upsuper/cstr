@@ -1,6 +1,6 @@
 # cstr
 
-[![Build Status](https://travis-ci.org/upsuper/cstr.svg?branch=master)](https://travis-ci.org/upsuper/cstr)
+[![CI](https://github.com/upsuper/cstr/workflows/CI/badge.svg)](https://github.com/upsuper/cstr/actions)
 [![Docs](https://docs.rs/cstr/badge.svg)](https://docs.rs/cstr)
 
 <!-- cargo-sync-readme start -->
