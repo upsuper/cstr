@@ -1,6 +1,7 @@
 # cstr
 
 [![CI](https://github.com/upsuper/cstr/workflows/CI/badge.svg)](https://github.com/upsuper/cstr/actions)
+[![Crates.io](https://img.shields.io/crates/v/cstr.svg)](https://crates.io/crates/cstr)
 [![Docs](https://docs.rs/cstr/badge.svg)](https://docs.rs/cstr)
 
 <!-- cargo-sync-readme start -->
