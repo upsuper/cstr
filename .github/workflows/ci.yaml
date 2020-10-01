@@ -13,6 +13,15 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+
+      - name: Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo
+
       - uses: actions-rs/cargo@v1
         with:
           command: check
@@ -27,6 +36,15 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+
+      - name: Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo
+
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -58,6 +76,15 @@ jobs:
           toolchain: stable
           override: true
       - run: rustup component add clippy
+
+      - name: Cache Cargo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo
+
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
