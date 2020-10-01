@@ -32,7 +32,12 @@ struct Error(Span, &'static str);
 #[proc_macro]
 pub fn cstr(input: RawTokenStream) -> RawTokenStream {
     let tokens = match build_byte_str(input.into()) {
+        // We can't use `&*ptr` to convert the raw pointer to reference, because as of Rust 1.46,
+        // dereferencing raw pointer in constants is unstable.
+        // This is being tracked in https://github.com/rust-lang/rust/issues/51911
+        // So we explicitly disable the clippy lint for this expression.
         Ok(s) => quote!(unsafe {
+            #[allow(clippy::transmute_ptr_to_ref)]
             ::std::mem::transmute::<_, &::std::ffi::CStr>(
                 #s as *const [u8] as *const ::std::ffi::CStr
             )

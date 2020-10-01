@@ -1,6 +1,6 @@
 [package]
 name = "cstr"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Xidorn Quan <me@upsuper.org>"]
 description = "Macro for building static CStr reference"
 repository = "https://github.com/upsuper/cstr"
