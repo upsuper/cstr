@@ -1,5 +1,5 @@
 use crate::Error;
-use proc_macro2::{Ident, Literal, Span, TokenStream, TokenTree};
+use proc_macro2::{Delimiter, Ident, Literal, Span, TokenStream, TokenTree};
 use std::char;
 
 macro_rules! unexpected_content {
@@ -8,30 +8,37 @@ macro_rules! unexpected_content {
     };
 }
 
-pub(crate) fn parse_input(input: TokenStream) -> Result<(Vec<u8>, Span), Error> {
-    let mut tokens = input.into_iter();
-    let token = match tokens.next() {
-        Some(token) => token,
-        None => {
-            return Err(Error(
-                Span::call_site(),
-                concat!("unexpected end of input, ", unexpected_content!()),
-            ))
+pub(crate) fn parse_input(mut input: TokenStream) -> Result<(Vec<u8>, Span), Error> {
+    loop {
+        let mut tokens = input.into_iter();
+        let token = match tokens.next() {
+            Some(token) => token,
+            None => {
+                return Err(Error(
+                    Span::call_site(),
+                    concat!("unexpected end of input, ", unexpected_content!()),
+                ))
+            }
+        };
+        let span = token.span();
+        let result = match token {
+            // Unwrap any empty group which may be created from macro expansion.
+            TokenTree::Group(group) if group.delimiter() == Delimiter::None => Err(group),
+            TokenTree::Literal(literal) => match parse_literal(literal) {
+                Ok(result) => Ok(result),
+                Err(msg) => return Err(Error(span, msg)),
+            },
+            TokenTree::Ident(ident) => Ok(parse_ident(ident)),
+            _ => return Err(Error(span, unexpected_content!())),
+        };
+        if let Some(token) = tokens.next() {
+            return Err(Error(token.span(), "unexpected token"));
         }
-    };
-    let span = token.span();
-    let result = match token {
-        TokenTree::Literal(literal) => match parse_literal(literal) {
-            Ok(result) => result,
-            Err(msg) => return Err(Error(span, msg)),
-        },
-        TokenTree::Ident(ident) => parse_ident(ident),
-        _ => return Err(Error(span, unexpected_content!())),
-    };
-    if let Some(token) = tokens.next() {
-        return Err(Error(token.span(), "unexpected token"));
+        match result {
+            Ok(result) => return Ok((result, span)),
+            Err(group) => input = group.stream(),
+        }
     }
-    Ok((result, span))
 }
 
 fn parse_literal(literal: Literal) -> Result<Vec<u8>, &'static str> {
