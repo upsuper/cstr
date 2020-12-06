@@ -19,6 +19,11 @@
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 //! ```
 
+// While this isn't necessary when using Cargo >= 1.42, omitting it actually requires path-less
+// `--extern proc_macro` to be passed to `rustc` when building this crate. Some tools may not do
+// this correctly. So it's added as a precaution.
+extern crate proc_macro;
+
 use crate::parse::parse_input;
 use proc_macro::TokenStream as RawTokenStream;
 use proc_macro2::{Literal, Span, TokenStream};
