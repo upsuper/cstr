@@ -1,4 +1,4 @@
-use crate::Error;
+use crate::implementation::Error;
 use proc_macro2::{Delimiter, Ident, Literal, Span, TokenStream, TokenTree};
 use std::char;
 
