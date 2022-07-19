@@ -22,11 +22,15 @@
 // While this isn't necessary when using Cargo >= 1.42, omitting it actually requires path-less
 // `--extern proc_macro` to be passed to `rustc` when building this crate. Some tools may not do
 // this correctly. So it's added as a precaution.
+#[cfg(proc_macro)]
 extern crate proc_macro;
 
+#[cfg(proc_macro)]
 mod parse;
+#[cfg(proc_macro)]
 mod implementation;
 
+#[cfg(proc_macro)]
 #[proc_macro]
 pub fn cstr(input: implementation::RawTokenStream) -> implementation::RawTokenStream {
     implementation::cstr(input)
