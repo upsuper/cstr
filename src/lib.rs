@@ -18,6 +18,7 @@
 //! let test = cstr!(hello);
 //! assert_eq!(test, CStr::from_bytes_with_nul(b"hello\0").unwrap());
 //! ```
+#![cfg_attr(not(proc_macro), no_std)]
 
 // While this isn't necessary when using Cargo >= 1.42, omitting it actually requires path-less
 // `--extern proc_macro` to be passed to `rustc` when building this crate. Some tools may not do
