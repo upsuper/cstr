@@ -26,8 +26,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          # This should follow 1.64 as it progresses throgh beta to stable
-          toolchain: nightly
+          toolchain: stable
           target: thumbv7em-none-eabi
           override: true
       - uses: actions-rs/cargo@v1
