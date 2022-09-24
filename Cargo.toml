@@ -7,7 +7,7 @@ repository = "https://github.com/upsuper/cstr"
 license = "MIT"
 keywords = ["macro", "cstr"]
 readme = "README.md"
-edition = "2018"
+edition = "2021"
 rust-version = "1.64"
 
 [lib]
